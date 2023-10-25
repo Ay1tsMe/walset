@@ -1,6 +1,6 @@
 # Walset Script
 
-![Demo](wallpaperwofi.gif)
+![Demo](walset.gif)
 
 This a bash script that uses `pywal` to generate colour schemes and change the wallpaper of the system. I have customised this script in order for it to work on `wayland` applications but you can edit out any program you don't use and replace it with one's you do.
 
