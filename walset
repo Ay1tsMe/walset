@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Check if the user provided an argument
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <path_to_image>"
+    exit 1
+fi
+
+IMAGE="$1"
+
+
+# Run the wal command
+wal -i "$IMAGE" -n
+
+# Run the swww command
+swww img "$IMAGE" -t wipe --transition-fps=144
+
+# Update discord and Chromium browsers
+~/pywalGits/ChromiumPywal/generate-theme.sh
+pywal-discord -t default
+
+# Update mako notifications
+~/.config/mako/update-theme.sh
+
+# Refresh waybar
+pkill waybar
+waybar > /dev/null 2>&1 &
+
+# Notify the user
+notify-send "Colour Scheme Changed" "Wallpaper has been changed to $(basename $IMAGE)!"
