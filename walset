@@ -14,17 +14,38 @@ wal -i "$IMAGE" -n
 
 # Run the swww command
 swww img "$IMAGE" -t wipe --transition-fps=144
+echo "Wallpaper has been set."
 
 # Update discord and Chromium browsers
 ~/pywalGits/ChromiumPywal/generate-theme.sh
 pywal-discord -t default
+echo "Refreshed Browser and Discord."
 
 # Update mako notifications
 ~/.config/mako/update-theme.sh
+echo "Updated notification colourscheme."
+
+# Update swaylock colourscheme
+~/.config/swaylock/update-theme.sh
+echo "Update swaylock colourscheme."
 
 # Refresh waybar
 pkill waybar
 waybar > /dev/null 2>&1 &
+echo "Restarted waybar."
+
+# Restart emacs daemon
+if [ $(systemctl --user is-active emacs.service) == "active" ]; then
+    echo "Emacsclient is running, reloading configuration."
+    emacsclient --eval '(doom/reload)' > /dev/null 2>&1
+else
+     echo "Emacs daemon is not running, skipping reload."
+fi
+
+# Reload Spicetify (Spotify)
+# This crashed spotify if open. Need to use spicetify watch -s instead but spotify pid is being a bitch
+# spicetify apply
 
 # Notify the user
 notify-send "Colour Scheme Changed" "Wallpaper has been changed to $(basename $IMAGE)!"
+echo "Done"
