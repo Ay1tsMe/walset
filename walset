@@ -48,4 +48,8 @@ fi
 
 # Notify the user
 notify-send "Colour Scheme Changed" "Wallpaper has been changed to $(basename $IMAGE)!"
+
+# Copy temp wallpaper to be used for hyprlock
+echo "converting image for hyprlock"
+convert $IMAGE -quality 100 /home/adamw/Pictures/wal.png
 echo "Done"
