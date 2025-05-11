@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Convert hex colour to RGB
+hex_to_rgb() {
+	local hex="${1/#\#}" # Remove leading #
+
+	if [[ ${#hex} -eq 6 ]]; then
+		R=$((16#${hex:0:2}))	
+		G=$((16#${hex:2:2}))	
+		B=$((16#${hex:4:2}))	
+		echo "Converted #${hex} to RGB(${R},${G},${B})"
+	fi
+}
+
 # Check if the user provided an argument
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <path_to_image>"
@@ -12,6 +24,9 @@ IMAGE="$1"
 # Run the wal command
 wal -i "$IMAGE" -n
 
+# Source new pywal colours
+source "${HOME}/.cache/wal/colors.sh"
+
 # Run the swww command
 swww img "$IMAGE" -t wipe --transition-fps=144
 echo "Wallpaper has been set."
@@ -22,7 +37,12 @@ pywal-discord -t default
 echo "Refreshed Browser and Discord."
 
 # Update mako notifications
-~/.config/mako/update-theme.sh
+# ~/.config/mako/update-theme.sh
+# echo "Updated notification colourscheme."
+
+# Update swaync notifications
+swaync-client --reload-config
+swaync-client -rs
 echo "Updated notification colourscheme."
 
 # Update swaylock colourscheme
@@ -46,10 +66,15 @@ fi
 # This crashed spotify if open. Need to use spicetify watch -s instead but spotify pid is being a bitch
 # spicetify apply
 
+# Change Desk light
+hex_to_rgb "$color3"
+hctl on adam_s_desk --color ${R},${G},${B} --transition 3
+echo "Changed Desk Light colour"
+
 # Notify the user
 notify-send "Colour Scheme Changed" "Wallpaper has been changed to $(basename $IMAGE)!"
 
 # Copy temp wallpaper to be used for hyprlock
-echo "converting image for hyprlock"
+echo "Converting image for hyprlock"
 convert $IMAGE -quality 100 /home/adamw/Pictures/wal.png
 echo "Done"
