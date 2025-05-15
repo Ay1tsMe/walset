@@ -69,6 +69,8 @@ fi
 # Change Desk light
 hex_to_rgb "$color3"
 hctl on adam_s_desk --color ${R},${G},${B} --transition 3
+sleep 0.2
+hctl on hctl_used
 echo "Changed Desk Light colour"
 
 # Notify the user
